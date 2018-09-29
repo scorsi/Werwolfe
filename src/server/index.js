@@ -28,6 +28,9 @@ io.on('connection', (socket) => {
     messages.push(data);
     io.emit('message', data);
   });
+  socket.on('login', (username) => {
+    socket.emit('login', username);
+  })
 });
 
 app.get("/*", (req, res) => {

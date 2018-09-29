@@ -1,19 +1,43 @@
-import {StaticRouter, Switch, Route, Link} from 'inferno-router';
+import {StaticRouter, Switch, Route} from 'inferno-router';
+import {connect} from '@cerebral/inferno';
+import {state} from 'cerebral/lib/tags';
 
 import Header from '../Header';
 import routes from "./routes";
+import AuthenticatedRoute from "./AuthenticatedRoute";
+import NotAuthenticatedRoute from "./NotAuthenticatedRoute";
 
 
-export default ({context, location}) => (
+export default connect({
+  authenticated: state`authenticated`
+}, ({authenticated: isCurrentlyAuthenticated, context, location}) => (
   <StaticRouter context={context} location={location}>
     <div>
       <Header/>
       <hr/>
       <Switch>
-        {routes.map(({exact, path, component}) => (
-          <Route exact={exact} path={path} component={component}/>
-        ))}
+        {routes.map(({exact, path, component, authenticated}) => {
+          if (authenticated === undefined)
+            return <Route
+              exact={exact}
+              path={path}
+              component={component}
+            />;
+          else if (authenticated === true)
+            return <AuthenticatedRoute
+              exact={exact}
+              path={path}
+              component={component}
+              authenticated={isCurrentlyAuthenticated}
+            />;
+          else return <NotAuthenticatedRoute
+              exact={exact}
+              path={path}
+              component={component}
+              authenticated={isCurrentlyAuthenticated}
+            />;
+        })}
       </Switch>
     </div>
   </StaticRouter>
-);
+));
