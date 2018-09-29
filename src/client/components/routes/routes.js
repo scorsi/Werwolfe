@@ -1,5 +1,5 @@
 import Home from "../Home";
-import Chat from "../Chat";
+import Login from "../Login";
 
 export default [
   {
@@ -8,7 +8,8 @@ export default [
     component: Home
   },
   {
-    path: "/chat",
-    component: Chat
+    exact: true,
+    path: "/login",
+    component: Login
   }
 ];
