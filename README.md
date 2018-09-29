@@ -1,2 +1,2 @@
-# Werwolfe
-Web app of the Ravensbuger's game: Werwölfe
+# simple-chat-inferno-cerebral
+A simple chat with SSR using Inferno (view), Cerebral (state manager) and FuseBox (bundler)
