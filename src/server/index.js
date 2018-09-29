@@ -6,8 +6,9 @@ import path from "path";
 import {Server} from "http";
 import socketio from "socket.io";
 
-import Chat from "../client/components/Chat";
+import StaticRouter from "../client/components/routes/Static";
 import module from "../client/module";
+
 
 const app = express();
 const server = Server(app);
@@ -29,16 +30,18 @@ io.on('connection', (socket) => {
   });
 });
 
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   function initialState({state}) {
     state.set('messages', messages);
   }
+
+  const context = {};
 
   const c = UniversalController(module);
   c.run(initialState, {});
   const appHtml = renderToString(
     <Container controller={c}>
-      <Chat/>
+      <StaticRouter location={req.url} context={context}/>
     </Container>
   );
   const stateScript = c.getScript();

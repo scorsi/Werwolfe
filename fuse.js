@@ -1,11 +1,12 @@
-const {FuseBox, Sparky, BabelPlugin, CSSPlugin, SassPlugin, CSSResourcePlugin} = require("fuse-box");
+const {FuseBox, Sparky, BabelPlugin, CSSPlugin, SassPlugin, CSSResourcePlugin, QuantumPlugin} = require("fuse-box");
+const sass = require("node-sass");
 
 let fuse = undefined;
 
 const fuseOptions = {
   homeDir: "./src/",
   output: "dist/$name.js",
-  sourceMaps: {inline: false, vendor: false},
+  sourceMaps: {inline: true, vendor: true},
   useTypescriptCompiler: false,
   plugins: [
     BabelPlugin({
@@ -17,17 +18,7 @@ const fuseOptions = {
   ]
 };
 const fuseClientOptions = {
-  ...fuseOptions,
-  plugins: [
-    ...fuseOptions.plugins,
-   [
-     SassPlugin(),
-     CSSResourcePlugin({
-       dist: "dist/styles"
-     }),
-     CSSPlugin()
-   ]
-  ]
+  ...fuseOptions
 };
 const fuseServerOptions = {
   ...fuseOptions
@@ -42,6 +33,19 @@ Sparky.task("clean", () => {
 Sparky.task("config", () => {
   fuse = FuseBox.init(fuseOptions);
   fuse.dev();
+});
+
+Sparky.task("compileAsset", () => {
+  console.log("compiling assets");
+  sass.render({
+    file: './src/assets/styles/index.scss',
+    outFile: './dist/client/styles/index.css'
+  })
+});
+
+Sparky.task("asset", () => {
+  Sparky.watch("./src/assets/**")
+    .exec("compileAsset")
 });
 
 Sparky.task("client", () => {

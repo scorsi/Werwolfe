@@ -28,11 +28,10 @@ export default connect({
     }
 
     render() {
-      const {messages} = this.props;
       return (
         <div>
           <ul>
-            {messages.map((message, key) => (
+            {this.props.messages.map((message, key) => (
               <li key={key}>{message}</li>
             ))}
           </ul>

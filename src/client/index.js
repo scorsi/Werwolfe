@@ -1,10 +1,8 @@
 import {hydrate} from "inferno";
 import {Container} from '@cerebral/inferno'
 
-import Chat from "./components/Chat";
+import BrowserRouter from "./components/routes/Browser";
 import controller from "./controller";
-
-import "./index.scss";
 
 
 // socket.io is loaded from server, see the served index in express app
@@ -13,7 +11,7 @@ controller.getSignal('connectSocket')();
 
 const wrapper = (
   <Container controller={controller}>
-    <Chat/>
+    <BrowserRouter/>
   </Container>
 );
 
